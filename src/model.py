@@ -37,7 +37,7 @@ class Model(object):
 		self.controller = controller
 
 	def print_map(self):
-		dot = gv.Digraph(engine = "neato")
+		dot = gv.Digraph(engine = "dot")
 		facts = []
 		connections = []
 
