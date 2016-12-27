@@ -8,7 +8,7 @@ class Main(tk.Frame):
 		self.controller = master
 		self.controller.model.print_map()
 
-		image = Image.open("../img/temp.gif") # path to image is relative to where prog is called from
+		image = Image.open("img/temp.gif") # path to image is relative to where prog is called from
 		self.image = ImageTk.PhotoImage(image)	# must hold reference to image otherwise it get's garbage collected and won't display
 
 		self.map = tk.Label(self, image=self.image)	
@@ -23,7 +23,8 @@ class Main(tk.Frame):
 
 		self.controller.model.print_map()
 
-		image = Image.open("../img/temp.gif") # path to image is relative to where prog is called from
+		image = Image.open("img/temp.gif") # path to image is relative to where prog is called from
 		self.image = ImageTk.PhotoImage(image)	# must hold reference to image otherwise it get's garbage collected and won't display
 
 		self.map.configure(image=self.image)
+		self.map.pack(side=tk.TOP, fill=tk.BOTH, expand=1)

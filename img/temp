@@ -1,2 +1,11 @@
 digraph {
+	hi [label=hi]
+	bi [label=bi]
+	hi [label=hi]
+	le [label=le]
+	hi [label=hi]
+	me [label=me]
+		hi -> bi
+		hi -> le [label=yo]
+		hi -> me [label=bi]
 }

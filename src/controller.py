@@ -7,7 +7,7 @@ from main_view import *
 class App(tk.Tk):
 	def __init__(self, *args, **kwargs):
 		tk.Tk.__init__(self, *args, **kwargs)
-		self.model = model.Model()
+		self.model = model.Model(self)
 
 		self.key_bindings = {
 			"Main": {
@@ -27,16 +27,16 @@ class App(tk.Tk):
 	def process_entry(self, event):
 		thought = self.frames["Main"].entry.get()
 
-		print(thought)
+#		print(thought)
 		if thought == "debug":
 			pdb.set_trace()
 
 		if ':' in thought:
 			facts = thought.split(':')
+			print "Facts: "+str(facts)
 			if len(facts) == 3:
 				self.model.add_fact( (facts[0], facts[1]), facts[2] )
-				self.model.add_fact( (facts[2], facts[1]), facts[0] )
-			else:
+			elif len(facts) == 2:
 				self.model.add_fact( facts[0], facts[1] )
 		else:
 			print("It is hard to remember without a reason.")
@@ -59,6 +59,9 @@ class App(tk.Tk):
 		# set key bindings
 		for k,v in self.key_bindings[frame].iteritems():
 			self.bind(k,v)
+
+	def update(self, frame):
+		self.frame[frame].update()
 
 	def debug(self, event):
 		pdb.set_trace()
