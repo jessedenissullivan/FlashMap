@@ -18,6 +18,7 @@ class Main(tk.Frame):
 		self.entry.pack(fill=tk.X, expand=1, side=tk.BOTTOM)
 		self.entry.focus_set()
 
+	# update main frame
 	def update(self):
 		self.entry.delete(0, tk.END)
 
@@ -28,3 +29,5 @@ class Main(tk.Frame):
 
 		self.map.configure(image=self.image)
 		self.map.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+		self.entry.focus_set()

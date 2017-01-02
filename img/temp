@@ -1,17 +1,5 @@
 digraph {
 	hi [label=hi]
-	lo [label=lo]
-	meme [label=meme]
-	schoss [label=schoss]
-	hi [label=hi]
 	bi [label=bi]
-	hi [label=hi]
-	meme [label=meme]
-	hi [label=hi]
-	yo [label=yo]
-		hi -> lo [label=me]
-		meme -> schoss
 		hi -> bi
-		hi -> meme [label=mom]
-		hi -> yo [label=bi]
 }

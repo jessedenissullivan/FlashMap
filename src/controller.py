@@ -1,33 +1,48 @@
+import xlsxwriter
 import pdb
 import Tkinter as tk
 import model
 from os import system
+import Tkconstants, tkFileDialog
 from main_view import *
 
 class App(tk.Tk):
 	def __init__(self, *args, **kwargs):
 		tk.Tk.__init__(self, *args, **kwargs)
+		# init model
 		self.model = model.Model(self)
 
+		# dict for key bindings <frame name>:{<key>:<event>}
 		self.key_bindings = {
 			"Main": {
-				"<Return>": self.process_entry
+				"<Return>": self.process_entry,
+				"<F1>": self.make_flashcards
 			}
 		}
 
+		# init frames
 		self.frames = {}
 		for F in [Main]:
 			self.frames[F.__name__] = F(self, height=200, width=300)
 			self.frames[F.__name__].pack(fill=tk.BOTH, expand=1)
 
+		# set file save options
+		self.file_opt = options = {
+			'filetypes': [('all files', '.*'), ('text files', '.txt')],
+			'initialfile': 'untitled.xlsx',
+			'parent': self
+		}
+
+		# set system focus, (for OS X only)
 		system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "python" to true' ''')
 
+		# show main frame
 		self.show_frame("Main")
 
+	# process command line input
 	def process_entry(self, event):
 		thought = self.frames["Main"].entry.get()
 
-#		print(thought)
 		if thought == "debug":
 			pdb.set_trace()
 
@@ -60,8 +75,23 @@ class App(tk.Tk):
 		for k,v in self.key_bindings[frame].iteritems():
 			self.bind(k,v)
 
-	def update(self, frame):
-		self.frame[frame].update()
+	# generate flashcards from mindmap
+	def make_flashcards(self, event):
+		# open file save dialogue
+		filename = tkFileDialog.asksaveasfilename(**self.file_opt)
+		
+		if filename:
+			with xlsxwriter.Workbook(filename) as f:
+				# generate flashcards
+				worksheet = f.add_worksheet()
+				self.model.make_flashcards(worksheet)
 
+		self.update("Main")
+
+	# update frame
+	def update(self, frame):
+		self.frames[frame].update()
+
+	# start debugger
 	def debug(self, event):
 		pdb.set_trace()
