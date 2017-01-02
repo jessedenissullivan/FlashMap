@@ -40,32 +40,31 @@ class Model(object):
 
 	# print graph as .gif for use in main frame
 	def print_map(self):
+		# use DOT engine
 		dot = gv.Digraph(engine = "dot")
-		facts = []
-		connections = []
+		
+		facts = []			# will store facts as [ ( <fact>, {<graph attributes for fact node>} ) ]
+		connections = []	# will store connections as [ ( (<fact>, <other fact>) , {<graph attributes for connection edge>} ) ]
 
-		print "Understanding: "+str(self.understanding)
+		for k,v in self.understanding.iteritems():		# k = <fact> or (<fact>, <connection>),  v = [<other facts>]
+			if isinstance(k, tuple):					# k = (<fact>, <connection>)
+				if k[0] not in facts:					# <fact> not in facts list
+					facts += [ ( k[0], {"label": k[0]} ) ]	# add as node to map, label with fact
 
-		for k,v in self.understanding.iteritems():
-			if isinstance(k, tuple):
-				if k[0] not in facts:
-					facts += [ ( k[0], {"label": k[0]} ) ]
-
-				for k2 in v:
-					if k2 not in facts:
+				for k2 in v:							# for each fact in [<other facts>]
+					if k2 not in facts:					# if <other fact> not in facts list add it
 						facts += [ ( k2, {"label": k2} ) ]
-					connections += [ ( (k[0],k2), {"label": k[1]} ) ]
-					print connections
-			else:
-				if k not in facts:
+					connections += [ ( (k[0],k2), {"label": k[1]} ) ]	# add connection <fact> --- <conenction> ---> <other fact> to map
+			else:										# k = <fact>, v = [<other facts>]
+				if k not in facts:						# add if not in facts list
 					facts += [ ( k, {"label": k} ) ]
 
-				for k2 in v:
-					if k2 not in facts:
+				for k2 in v:							
+					if k2 not in facts:					# add if not in facts list
 						facts += [ ( k2, {"label": k2} ) ]
-					connections += [ ( (k,k2), {} ) ]
+					connections += [ ( (k,k2), {} ) ]	# add connection <fact> ---> <other fact> to map
 
-		dot.format = 'gif'
+		dot.format = 'gif'								# print map as temp.gif and temp (map source code) to img/
 		add_edges(add_nodes(dot, facts), connections).render('img/temp')
 
 	# add fact or connection to model.understanding concept map

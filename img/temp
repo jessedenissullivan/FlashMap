@@ -1,5 +1,5 @@
 digraph {
 	hi [label=hi]
-	bi [label=bi]
-		hi -> bi
+	"bi]" [label="bi]"]
+		hi -> "bi]"
 }

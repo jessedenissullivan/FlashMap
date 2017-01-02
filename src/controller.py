@@ -12,19 +12,21 @@ class App(tk.Tk):
 		# init model
 		self.model = model.Model(self)
 
-		# dict for key bindings <frame name>:{<key>:<event>}
-		self.key_bindings = {
-			"Main": {
-				"<Return>": self.process_entry,
-				"<F1>": self.make_flashcards
-			}
-		}
-
 		# init frames
 		self.frames = {}
 		for F in [Main]:
 			self.frames[F.__name__] = F(self, height=200, width=300)
 			self.frames[F.__name__].pack(fill=tk.BOTH, expand=1)
+
+		# dict for key bindings <frame name>:{<key>:<event>}
+		self.event_bindings = {
+			"Main": {
+				"<1>": self.frames["Main"].init_drag_map,
+				"<B1-Motion>": self.frames["Main"].drag_map,
+				"<Return>": self.process_entry,
+				"<F1>": self.make_flashcards
+			}
+		}
 
 		# set file save options
 		self.file_opt = options = {
@@ -62,7 +64,7 @@ class App(tk.Tk):
 	# switch key bindings to appropriate view
 	def show_frame(self, frame):
 		# clear all previous bindingss
-		for k,v in self.key_bindings.iteritems():
+		for k,v in self.event_bindings.iteritems():
 			for l,w in v.iteritems():
 				self.unbind(l)
 
@@ -72,7 +74,7 @@ class App(tk.Tk):
 		self.frames[frame].tkraise()
 
 		# set key bindings
-		for k,v in self.key_bindings[frame].iteritems():
+		for k,v in self.event_bindings[frame].iteritems():
 			self.bind(k,v)
 
 	# generate flashcards from mindmap
